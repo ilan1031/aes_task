@@ -26,6 +26,9 @@ async def ask_question(query: Query):
         result = qa_chain.invoke({"query": query.question})
         return {"response": result["result"]}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))                      
+        raise HTTPException(status_code=500, detail=str(e))     
+
+
+# run the app with: uvicorn main:app --reload                         
 
 
