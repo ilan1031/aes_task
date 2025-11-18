@@ -6,3 +6,4 @@ ollama
 fastapi
 unicorn
 pydantic
+langchain-community

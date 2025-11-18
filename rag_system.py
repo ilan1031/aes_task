@@ -22,7 +22,7 @@ def load_and_split_documents(file_path):
 # chunks = load_and_split_documents(file_path)
 
 
-def create_vector_store(chunks)
+def create_vector_store(chunks):
     # Create embeddings
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
