@@ -7,7 +7,7 @@ from langchain.chains import RetrievalQA
 
 import os
 
-def load_and _split_documents(file_path):
+def load_and_split_documents(file_path):
     #load .txt
     loader = TextLoader(file_path)
     documents = loader.load()
@@ -18,8 +18,8 @@ def load_and _split_documents(file_path):
     return docs
 
 # use 
-file_path = "knowladge.txt"
-chunks = load_and_split_documents(file_path)
+# file_path = "knowladge.txt"
+# chunks = load_and_split_documents(file_path)
 
 
 def create_vector_store(chunks)
@@ -27,8 +27,8 @@ def create_vector_store(chunks)
     embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
     # Create vector store
-    create_vector_store = Chroma.from_documents(documents=chunks, embeddings=embeddings)
-    return create_vector_store
+    vector_store = Chroma.from_documents(documents=chunks, embeddings=embeddings)
+    return vector_store
 
 create_vector_store = create_vector_store(chunks)    
 
