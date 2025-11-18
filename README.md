@@ -1,57 +1,155 @@
-# aes_task — RAG API
+```markdown
+# 🔍 AES Task — RAG API (FastAPI + Chroma + Sentence Transformers)
 
-Simple FastAPI app that builds a small RAG index (sentence-transformers + Chroma) from `knowladge.txt`
-and exposes a POST /ask endpoint. Ollama is optionally used to synthesize answers; otherwise an extractive
-answer is returned.
+A lightweight, efficient RAG (Retrieval-Augmented Generation) API built with **FastAPI**, **ChromaDB**, and **Sentence Transformers**.  
+The API loads knowledge from `knowladge.txt`, performs vector search using MiniLM embeddings, and returns concise extractive answers.
 
-## Prerequisites
-- macOS with Python 3.13.5 (or compatible 3.x)
-- Homebrew (optional) for pyenv or Python installs
-- Recommended: create and activate a venv for the project
+The API is deployed live on Hugging Face and can be tested using Postman or cURL.
 
-## Quick setup
-1. Create & activate venv (use your Python 3.13 binary)
-```bash
-python3.13 -m venv venv
-source venv/bin/activate
+---
+
+## 🚀 Live API Endpoint (HuggingFace)
+
+**POST**  
 ```
 
-2. Fix requirements typo if present: open `requirements.txt` and replace `unicorn` → `uvicorn`.
+[https://ilanthalirs-aes-chatbot.hf.space/ask](https://ilanthalirs-aes-chatbot.hf.space/ask)
 
-3. Install dependencies
+````
+
+### Example JSON body:
+```json
+{
+  "question": "What information do you have?"
+}
+````
+
+---
+
+## 🧪 Postman Collection
+
+You can test the API via Postman using this workspace:
+
+🔗 **Postman Link:**
+[https://fintech-9424.postman.co/workspace/Team-Workspace~b3c618e1-f598-44b0-8ccb-399d921682c0/request/46051251-50bcdcbe-5326-46eb-ac6f-8ac3a58dcd85?action=share&creator=46051251&ctx=documentation](https://fintech-9424.postman.co/workspace/Team-Workspace~b3c618e1-f598-44b0-8ccb-399d921682c0/request/46051251-50bcdcbe-5326-46eb-ac6f-8ac3a58dcd85?action=share&creator=46051251&ctx=documentation)
+
+---
+
+## 📦 Features
+
+* Fast, CPU-friendly document embeddings (`all-MiniLM-L6-v2`)
+* In-memory vector search using ChromaDB
+* Simple extractive answer generation (no GPU or large model required)
+* Small codebase, quick to deploy anywhere
+* Automatically indexes `knowladge.txt` on startup
+
+---
+
+## 🧰 **Local Development Setup**
+
+### 1. Create & activate a virtual environment
+
 ```bash
-python -m pip install --upgrade pip setuptools wheel
-python -m pip install -r requirements.txt
+python3 -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
 ```
 
-4. Build the index (the app does this on startup using `knowladge.txt`).
+### 2. Install dependencies
 
-## Run
-Start the server (use the venv python):
 ```bash
-python -m uvicorn main:app --reload
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
 ```
 
-Server will be available at: `http://127.0.0.1:8000`
+### 3. Run the API locally
 
-## API
-POST /ask
-- Payload: JSON { "question": "your question" }
-- Response: JSON { "response": "<answer>" }
-
-Example:
 ```bash
-curl -sS -X POST http://127.0.0.1:8000/ask \
+uvicorn main:app --reload
+```
+
+Your API will be available at:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## 📡 API Usage
+
+### ▶️ **POST /ask**
+
+**Request body:**
+
+```json
+{
+  "question": "your question here"
+}
+```
+
+**Response:**
+
+```json
+{
+  "response": "Your answer based on knowladge.txt"
+}
+```
+
+---
+
+## 🧪 cURL Example
+
+```bash
+curl -X POST "http://127.0.0.1:8000/ask" \
   -H "Content-Type: application/json" \
-  -d '{"question":"what are your support hours?"}' | jq
+  -d "{\"question\": \"What are your support hours?\"}"
 ```
 
-## Notes
-- Ollama: if installed and on PATH, the app will attempt to use it for answers. Set `OLLAMA_MODEL` env var to change model name.
-- If Chroma reports `Collection already exists`, delete the collection in code or restart with a different `collection_name`.
-- Keep `knowladge.txt` updated with domain text you want indexed. The app splits text into chunks and indexes them on startup.
-- For portability, prefer using `python -m uvicorn` so the correct interpreter/venv is used.
+---
 
-## Troubleshooting
-- `ModuleNotFoundError: langchain.community`: this project does not require langchain; remove it from requirements if unnecessary.
-- If pip fails to build packages requiring Rust (e.g., bcrypt), install Rust via rustup or pin to packages with wheels.
+## 📁 Project Structure
+
+```
+├── main.py               # FastAPI server
+├── rag_system.py         # RAG pipeline (Chroma + MiniLM)
+├── knowladge.txt         # Your custom knowledge base
+├── requirements.txt
+├── Dockerfile            # Only for deployment (not required locally)
+└── README.md
+```
+
+---
+
+## 📝 Notes
+
+* The system uses **extractive RAG**, not generative LLMs.
+  This keeps the API extremely fast and low-resource.
+* Update `knowladge.txt` any time — the index rebuilds on startup.
+* If Chroma shows `Collection already exists`, restart the API.
+* No Ollama is used in this build (fully CPU-compatible).
+
+---
+
+## 🛠 Troubleshooting
+
+➤ **Sentence-transformers slow install?**
+Ensure you have pip ≥ 23:
+
+```bash
+pip install --upgrade pip
+```
+
+➤ **Rust-related pip build errors?**
+Pin problematic packages or install Rust:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+---
+
+## 📜 License
+
+MIT License © 2025
+
